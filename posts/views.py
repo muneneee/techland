@@ -25,7 +25,6 @@ from rest_framework.mixins import ListModelMixin,CreateModelMixin
 from authentication.models import User
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-# from .serializer import create_comment_serializer
 
 
 
