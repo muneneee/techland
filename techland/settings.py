@@ -14,25 +14,25 @@ import os
 
 
 
-SECRET_KEY = '123456789'
-DEBUG = True
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('NAME', 'postgres'),
-        'USER': os.environ.get('USER', 'postgres'),
-        'PASSWORD': os.environ.get('PASSWORD', 'password'),
-        # 'HOST': os.environ.get('DB_HOST', 'localhost'),
-        # 'PORT': os.environ.get('DB_PORT', '5432'),
-        # 'TEST': {
-        #     'NAME': 'test_<app_name>'
-        # }
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+        'TEST': {
+            'NAME': 'test_techland'
+        }
     },
 }
 
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
