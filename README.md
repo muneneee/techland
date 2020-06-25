@@ -31,4 +31,6 @@ Create and activate a virtual environment
 
     source venv/bin/activate
 
+Install required Dependencies
 
+    pip install -r requirements.txt
