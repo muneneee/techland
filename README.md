@@ -5,5 +5,9 @@ This is an application that allows the user to login and verified information/in
 ### REQUIRED FEATURES 
 * Django-rest framework
 * Psycopg2
-
+* 
+### ADDITIONAL FEATURES 
+* Uploadcare
+* Decouple
+* 
 
