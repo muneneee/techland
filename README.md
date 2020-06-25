@@ -13,5 +13,10 @@ This is an application that allows the user to login and verified information/in
 * Virtual Environment
 * Django3
 * Django-RESTful
-### TECHNOLOGIES & LANGUAGES
+### TECHNOLOGIES & LANGUAGES 
+Project management (Agile) https://www.pivotaltracker.com
+
+Version control (Git) https://git-scm.com/
+
+Version control (Python) https://www.python.org/
 
