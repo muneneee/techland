@@ -51,11 +51,22 @@ Running the application
 | Method | Endpoint                        | Parameters                 |Description                           |     
 | ------ | ------------------------------- |-------------------------   | -------------------------------------|
 | POST   |        /auth/login              |      --------              | log in user                          |   
-| POST   |        /auth/register/          |      --------              | register user                        |                               
-| GET    |        /api/comments/           |type=post&id=ID             | get comments to a particular post    |
+| POST   |        /auth/register/          |      --------              | register user                        |                            | GET    |        /api/comments/           |type=post&id=ID             | get comments to a particular post    |
 | POST   |        /api/comments/create/    |type=post&id=ID&parent_id=0 | create comment              
-| POST   |        posts/api/posts/         |       --------             | displays all posts and allows to create a post        
-|        |                                 |       --------             |                   
+| POST   |        posts/api/posts/         |       --------             | displays all posts
+| POST   |        posts/api/posts/         |       --------             | creates a post                
+| GET    |  posts/api/posts/<int:pk>/      |       --------             | retrieves a post using primary key                
+| PUT    |  posts/api/posts/<int:pk>/      |       --------             | updates a post            
+| DELETE |  posts/api/posts/<int:pk>/      |       --------             | deletes a post
+| GET    |  posts/api/categories/          |       --------             | displays all categories          
+| POST   |  posts/api/categories/          |       --------             | creates a category              
+| GET    |  posts/api/categories/<int:pk>/ |       --------             | retrieves a category using primary key              
+| PUT    |  posts/api/categories/<int:pk>/ |       --------             | updates a category
+| DELETE |  posts/api/categories /<int:pk>/|       --------             | deletes a category               
+| GET    |        auth/api/profiles/       |       --------             | displays all profiles                                
+| GET    |  auth/api/profiles/<int:pk>     |       --------             | retrieves a particular profile              
+| PUT    |  auth/api/profiles/<int:pk>     |       --------             | updates a profile                  
+                           
 
 
 ### LICENSE
