@@ -9,5 +9,8 @@ This is an application that allows the user to login and verified information/in
 * Uploadcare
 * Decouple
 ### PREREQUISITES
-
+* Python3.6 
+* Virtual Environment
+* Django3
+* Django-RESTful
 
