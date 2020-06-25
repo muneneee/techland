@@ -34,3 +34,17 @@ Create and activate a virtual environment
 Install required Dependencies
 
     pip install -r requirements.txt
+
+Copy environment variable
+
+    cp env.sample .env
+
+Load/refresh .environment variables  
+
+    source .env
+
+Running the application 
+
+     python manage.py server
+   
+
