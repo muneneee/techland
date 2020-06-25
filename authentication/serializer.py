@@ -79,7 +79,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('user', 'bio' ,'picture')
-     
+    
 
 class ProfileSerializerwithoutUser(serializers.ModelSerializer):
     '''

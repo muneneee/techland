@@ -1,16 +1,28 @@
 from rest_framework import serializers
 from .models import Post, Category
+from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
+from django.contrib.auth import get_user_model
+from comment.models import Comment
+from comment.api.serializers import CommentSerializer
+
+User = get_user_model()
+
 
 class PostSerializer(serializers.ModelSerializer):
     '''
     Class that defines post serializer
     '''
+    comments =SerializerMethodField()
     class Meta:
         model = Post
-        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'author', 'is_approved')
+        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
 
     def create(self,validated_data):
         return Post.objects.create(**validated_data)
+
+    def get_comments(self, obj):
+        comments_qs = Comment.objects.filter_parents_by_object(obj)
+        return CommentSerializer(comments_qs, many=True).data
 
 class PostSerializerWithoutAuthor(serializers.ModelSerializer):
     '''
@@ -37,3 +49,5 @@ class  CategorySerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
+
+    
