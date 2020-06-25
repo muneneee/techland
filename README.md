@@ -13,4 +13,5 @@ This is an application that allows the user to login and verified information/in
 * Virtual Environment
 * Django3
 * Django-RESTful
+### TECHNOLOGIES & LANGUAGES
 
