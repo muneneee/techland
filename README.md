@@ -20,7 +20,15 @@ Version control (Git) https://git-scm.com/
 
 Version control (Python) https://www.python.org/
 ### INSTALLATION AND SETUP
+Clone the repository below
 
     git clone https://github.com/{username}/{repo_name}.git
+
+
+Create and activate a virtual environment
+
+    virtualenv venv --python=python3.6
+
+    source venv/bin/activate
 
 
