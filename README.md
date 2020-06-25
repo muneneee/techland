@@ -21,3 +21,6 @@ Version control (Git) https://git-scm.com/
 Version control (Python) https://www.python.org/
 ### INSTALLATION AND SETUP
 
+    git clone https://github.com/{username}/{repo_name}.git
+
+
