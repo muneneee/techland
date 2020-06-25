@@ -87,7 +87,7 @@ TEMPLATES = [
 
 UPLOADCARE = {
     'pub_key': '557ba8f5e78026902bd0',
-    'secret': ' 48f6b1bf0063508ad239',
+    'secret': '48f6b1bf0063508ad239',
 }
 
 
