@@ -46,5 +46,7 @@ Load/refresh .environment variables
 Running the application 
 
      python manage.py server
-   
 
+### ENDPOINTS AVAILABLE 
+### LICENSE
+MIT
