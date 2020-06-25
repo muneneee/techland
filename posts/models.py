@@ -14,6 +14,7 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     author=models.ForeignKey('authentication.User', on_delete=models.CASCADE)
+    is_approved =models.BooleanField(default=False)
     comments = GenericRelation(Comment)
 
     def __str__(self):
