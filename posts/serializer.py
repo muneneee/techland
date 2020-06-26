@@ -13,6 +13,8 @@ class PostSerializer(serializers.ModelSerializer):
     Class that defines post serializer
     '''
     comments =SerializerMethodField()
+    category = serializers. SlugRelatedField(read_only= True, slug_field= 'name')
+    author = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
     class Meta:
         model = Post
         fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
@@ -23,6 +25,7 @@ class PostSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         comments_qs = Comment.objects.filter_parents_by_object(obj)
         return CommentSerializer(comments_qs, many=True).data
+
 
 class PostSerializerWithoutAuthor(serializers.ModelSerializer):
     '''
@@ -49,5 +52,7 @@ class  CategorySerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
+
+    
 
     

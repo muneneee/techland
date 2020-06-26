@@ -76,6 +76,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     ''' 
     Class that defines profile serializer
     '''
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
+
     class Meta:
         model = Profile
         fields = ('user', 'bio' ,'picture')
