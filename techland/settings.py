@@ -156,7 +156,6 @@ AUTH_USER_MODEL = 'authentication.User'
 
 LOGIN_URL = 'login'
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:4200"
-]
+CORS_ORIGIN_ALLOW_ALL = True   
+
 
