@@ -12,7 +12,7 @@ class Post(models.Model):
     title= models.CharField(max_length=30)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category',  on_delete=models.CASCADE)
     author=models.ForeignKey('authentication.User', on_delete=models.CASCADE)
     is_approved =models.BooleanField(default=False)
     comments = GenericRelation(Comment)
@@ -24,6 +24,9 @@ class Category(models.Model):
     name= models.CharField(max_length=30)
 
     def __str__(self):
+        return self.name
+
+    def natural_key(self):
         return self.name
 
 
