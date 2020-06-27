@@ -27,6 +27,7 @@ from authentication.models import User
 from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from rest_framework.parsers import FormParser,MultiPartParser, JSONParser, FileUploadParser
 
 
 
@@ -34,9 +35,11 @@ class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
     '''
     View that allows you to view and add to the list of all posts
     '''
-
+    
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    parser_classes = (FormParser,MultiPartParser,JSONParser, FileUploadParser)
+    
 
     def get(self, request, *args, **kwargs):
         '''
@@ -44,11 +47,16 @@ class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
         '''
         return self.list(request, *args, *kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format = None):
         '''
         Function that lets you add a new post to the list of all post
         '''
-        return self.create(request,*args, *kwargs)
+        serializers = PostSerializer(data = request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PostDetails(RetrieveAPIView):
     '''
