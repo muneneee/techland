@@ -27,4 +27,6 @@ class Category(models.Model):
         return self.name
 
 
-
+class Wishlist(models.Model):
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
+    posts = models.ManyToManyField(Post)
