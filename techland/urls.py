@@ -15,9 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path,include
+from posts.views import WishlistViewSet
+from rest_framework.routers import DefaultRouter
+
+from rest_framework import routers
+
+
+router = DefaultRouter()
+router.register('api/wishlists', WishlistViewSet, basename='wishlist')
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
     path('auth/',include('authentication.urls')),
     path('posts/',include('posts.urls')),
     path('api/', include('comment.api.urls')),

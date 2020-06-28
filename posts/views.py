@@ -16,18 +16,19 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
     )
 from .serializer import PostSerializer
-from .models import  Post
 from authentication.models import User
-from rest_framework import status
+from rest_framework import status,viewsets,serializers,status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
-from .models import Post, Category
+from .models import Post, Category, Wishlist
 from authentication.models import User
-from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor
+from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import FormParser,MultiPartParser, JSONParser, FileUploadParser
+from rest_framework import filters
+
 
 
 
@@ -165,3 +166,8 @@ class CategoryDetails(RetrieveAPIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class WishlistViewSet(viewsets.ModelViewSet):
+     
+     queryset = Wishlist.objects.all()
+     serializer_class = WishlistSerializer

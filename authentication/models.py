@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-
 class User(AbstractBaseUser,PermissionsMixin):
     username = models.CharField(max_length=30,unique=True)
     email = models.EmailField(_('email address'), unique=True)
@@ -42,4 +41,12 @@ def create_user_profile(sender,instance,created, **kwargs):
 @receiver(post_save,sender = User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save
+
+
+
+
+
+
+
+
     
