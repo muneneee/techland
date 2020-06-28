@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import Post, Category
+from .models import Post, Category,Wishlist
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
 from django.contrib.auth import get_user_model
 from comment.models import Comment
 from comment.api.serializers import CommentSerializer
+
 
 User = get_user_model()
 
@@ -49,5 +50,15 @@ class  CategorySerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
+
+    
+
+class WishlistSerializer(serializers.ModelSerializer):
+    '''
+    Class that defines post serializer
+    '''
+    class Meta:
+        model = Wishlist
+        fields = ('post',)
 
     

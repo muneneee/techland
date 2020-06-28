@@ -22,13 +22,18 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
-from .models import Post, Category
+from .models import Post, Category,Wishlist
 from authentication.models import User
-from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor
+from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+# from rest_framework import viewsets
+from rest_framework import generics
+# from .serializer import WishlistSerializer
+# from .models import Wishlist
 
+# from rest_framework.decorators import api_view
 
 class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
     '''
@@ -157,3 +162,17 @@ class CategoryDetails(RetrieveAPIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class Wishlists(generics.ListCreateAPIView):
+    '''
+    View that allows you to view and add to the list of all posts
+    '''
+
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+
+
+
+class WishlistDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer

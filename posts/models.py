@@ -6,7 +6,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 
 
-
 class Post(models.Model):
     image = ImageField(blank=True, manual_crop='')
     title= models.CharField(max_length=30)
@@ -25,6 +24,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
+#1 
+class Wishlist(models.Model):
+    post = models.ManyToManyField(Post)
 
 

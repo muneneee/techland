@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'pyuploadcare.dj',
     'rest_framework',
     'comment',
+    'techland',
 
 
 ]
@@ -129,7 +130,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 

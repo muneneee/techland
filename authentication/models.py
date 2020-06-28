@@ -29,7 +29,7 @@ class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
     picture = ImageField(blank=True, manual_crop='')
-
+  
     def __str__(self):
         return self.user.username
 

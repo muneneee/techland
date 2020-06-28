@@ -51,7 +51,7 @@ Running the application
 | Method | Endpoint                        | Parameters                 |Description                           |     
 | ------ | ------------------------------- |-------------------------   | -------------------------------------|
 | POST   |        /auth/login              |      --------              | log in user                          |   
-| POST   |        /auth/register/          |      --------              | register user                        |                            | GET    |        /api/comments/           |type=post&id=ID             | get comments to a particular post    |
+| POST   |        /auth/register/          |      --------              | register user                        |                             | GET    |        /api/comments/           |type=post&id=ID             | get comments to a particular post    |
 | POST   |        /api/comments/create/    |type=post&id=ID&parent_id=0 | create comment              
 | POST   |        posts/api/posts/         |       --------             | displays all posts
 | POST   |        posts/api/posts/         |       --------             | creates a post                
@@ -66,8 +66,13 @@ Running the application
 | GET    |        auth/api/profiles/       |       --------             | displays all profiles                                
 | GET    |  auth/api/profiles/<int:pk>     |       --------             | retrieves a particular profile              
 | PUT    |  auth/api/profiles/<int:pk>     |       --------             | updates a profile                  
-                           
+| GET    |posts/api/wishlist-detail/<int:pk>|                           | views a wishlist using primarey key
+| DELETE |posts/api/wishlist-detail/<int:pk>|                           | delete a wishlist
+| PUT    |posts/api/wishlist-detail/<int:pk>|                           | updates a wishlist
+| GET    |  posts/api/wishlists/            |                           | views a wishlist 
+| POST   |  posts/api/wishlists/            |                           | ceates a wishlist
 
 
+ 
 ### LICENSE
 MIT
