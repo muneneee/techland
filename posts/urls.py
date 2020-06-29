@@ -11,10 +11,6 @@ urlpatterns = [
     path('api/wishlist/', views.WishlistList.as_view()),
     path('api/wishlist/<int:pk>', views.WishlistDetails.as_view()),
     path('api/wishlist/<int:pk>/<int:post_id>', views.WishlistDelete.as_view()),
-
-    # path('api/wishlists/',views.Wishlists.as_view()),
-    # path('api/wishlist-detail/<int:pk>',views.WishlistDetail.as_view()),
-
     path("api/get_likes", views.get_likes, name='get_likes'),
     path("api/post_likes/<int:post_id>", views.post_likes, name='post_likes'),
     path("api/get_dislikes", views.get_dislikes, name='get_dislikes'),

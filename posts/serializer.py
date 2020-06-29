@@ -83,26 +83,6 @@ class WishlistSerializerwithoutUser(serializers.ModelSerializer):
         return wishlist
     
 
-# class WishlistSerializer(serializers.ModelSerializer):
-#     '''
-#     Class that defines post serializer
-#     '''
-#     class Meta:
-#         model = Wishlist
-#         fields = '__all__'
-
-# class ListwishtSerializer(serializers.ModelSerializer):
-#     post = PostSerializer(read_only=True,many=True)
-#     '''
-#     Class that defines post serializer
-#     '''
-#     class Meta:
-#         model = Wishlist
-#         fields = '__all__'
-
-
-
-
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:

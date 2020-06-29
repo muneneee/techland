@@ -237,36 +237,6 @@ class WishlistDelete(DestroyAPIView,):
 
 
 
-
-
-
-
-
-
-
-# class Wishlists(generics.ListCreateAPIView):
-#     '''
-#     View that allows you to view and add to the list of all posts
-#     '''
-
-#     queryset = Wishlist.objects.all()
-#     serializer_class = WishlistSerializer
-    
-#     def get(self,request):
-#         wishlist = Wishlist.objects.all()
-#         serializer = ListwishtSerializer(wishlist,many=True)
-#         return Response(serializer.data)
-
-
-
-# class WishlistDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Wishlist.objects.all()
-#     serializer_class = WishlistSerializer
-
-
-
-
-
 @api_view(['GET'])
 def get_likes(requests):
     query_set = Like.objects.all()
