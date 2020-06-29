@@ -5,7 +5,7 @@ from pyuploadcare.dj.models import ImageField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+import posts.models
 
 
 class User(AbstractBaseUser,PermissionsMixin):
@@ -29,9 +29,11 @@ class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
     picture = ImageField(blank=True, manual_crop='')
+    
+
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}'s profile"
 
 
 @receiver(post_save, sender=User)

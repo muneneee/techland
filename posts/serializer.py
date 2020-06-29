@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Category
+from .models import Post, Category,Subscription
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
 from django.contrib.auth import get_user_model
 from comment.models import Comment
@@ -18,6 +18,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
+        depth=1
 
     def create(self,validated_data):
         return Post.objects.create(**validated_data)
@@ -34,6 +35,7 @@ class PostSerializerWithoutAuthor(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id','image', 'title', 'content', 'timestamp', 'category','is_approved')
+        depth =1
     
     def update(self, instance, validated_data):
         instance.image = validated_data.get('image', instance.image)
@@ -42,17 +44,68 @@ class PostSerializerWithoutAuthor(serializers.ModelSerializer):
         instance.category = validated_data.get('category', instance.category)
         instance.is_approved = validated_data.get('is_approved', instance.is_approved)
         instance.author = validated_data.get('author', instance.author)
+       
         instance.save()
         return instance
 
 class  CategorySerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Category
         fields = ('id', 'name')
 
+
+        
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
 
-    
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    ''' 
+    Class that defines subscription serializer
+    '''
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
+
+    class Meta:
+        model = Subscription
+        fields = ('user', 'categories') 
+        extra_kwargs= {'categories': {'required': False}} 
+        depth =1
+
+class SubcriptionSerializerwithoutUser(serializers.ModelSerializer):
+    '''
+    Class that defines subscription serializer without user
+    '''
+    class Meta:
+        model = Subscription
+        fields = ('categories',)
+
+    def update(self, instance, validated_data):
+        categories = validated_data.pop('categories')
+        subscription = instance
+        for (key, value) in validated_data.items():
+            setattr(subscription, key, value)
+
+        for category in categories:
+            subscription.categories.add(category)
+
+        subscription.user = validated_data.get('user', instance.user)
+        subscription.save()
+
+        return subscription
+
+    # def remove_category(self, instance, validated_data):
+    #     subscription = instance 
+    #     category = validated_data.get(category)
+
+    #     for i in subscription.categories.all():
+    #         if i == category:
+    #             subscription.categories.remove(i)
+
+    #     subscription.save()
 
     
+                
+
+        
