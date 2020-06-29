@@ -54,11 +54,25 @@ class  CategorySerializer(serializers.ModelSerializer):
     
 
 class WishlistSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True,many=True)
     '''
     Class that defines post serializer
     '''
     class Meta:
         model = Wishlist
-        fields = ('post',)
+        fields = ("post",)
 
-    
+
+# class LikeSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = Like
+#         fields = ('user','date_posted','date_updated')  
+
+# class DislikeSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = Dislike
+#         fields = ('user','date_posted','date_updated')  
+
+        

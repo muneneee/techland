@@ -29,3 +29,16 @@ class Wishlist(models.Model):
     post = models.ManyToManyField(Post)
 
 
+# class Like(models.Model):
+#     user = models.ManyToManyField(User)
+#     date_posted = models.DateTimeField(auto_now_add=True)
+#     date_updated = models.DateTimeField()
+
+# class Dislike(models.Model):
+#     user = models.ManyToManyField(User)
+#     date_posted = models.DateTimeField(auto_now_add=True)
+#     date_updated = models.DateTimeField()
+    
+
+
+

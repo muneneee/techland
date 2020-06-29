@@ -28,12 +28,11 @@ from .serializer import PostSerializer, CategorySerializer,PostSerializerWithout
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-# from rest_framework import viewsets
 from rest_framework import generics
-# from .serializer import WishlistSerializer
-# from .models import Wishlist
 
-# from rest_framework.decorators import api_view
+from django.utils import timezone
+
+from rest_framework.decorators import api_view
 
 class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
     '''
@@ -172,7 +171,24 @@ class Wishlists(generics.ListCreateAPIView):
     serializer_class = WishlistSerializer
 
 
-
 class WishlistDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
+
+
+# @api_view(['GET'])
+# def get_likes(request):
+#     likes = Like.objects.all().count()
+
+#     serializer =  LikeSerializer(likes, many=True)
+#     return Response(seriali.data, status = status.HTTP_200_OK)
+
+# @api_view(['POST'])
+# def post_likes(request):
+#     serializer = LikeSerializer(data = request.data)
+#     if serializer.is_valid():
+#         serializer.user = request.user
+#         serializer.date_updated = timezone.now()
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status =status.HTTP_400_BAD_REQUEST) 
