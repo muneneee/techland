@@ -80,7 +80,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('user', 'bio' ,'picture')
+        fields = ('id','user', 'bio' ,'picture')
     
 
 class ProfileSerializerwithoutUser(serializers.ModelSerializer):
@@ -89,7 +89,7 @@ class ProfileSerializerwithoutUser(serializers.ModelSerializer):
     '''
     class Meta:
         model = Profile
-        fields = ('bio' ,'picture')
+        fields = ('id','bio' ,'picture')
 
     def update(self, instance, validated_data):
         instance.user = validated_data.get('user', instance.user)
