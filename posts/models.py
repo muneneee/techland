@@ -26,11 +26,21 @@ class Category(models.Model):
         return self.name
 #1 
 class Wishlist(models.Model):
-    post = models.ManyToManyField(Post)
-    name = models.CharField(max_length=250, default='general')
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
+    post = models.ManyToManyField(Post,related_name = "wishlists", blank=True)
 
     def __str__(self):
-        return self.name
+        return self.user.username
+
+
+
+
+# class Wishlist(models.Model):
+#     post = models.ManyToManyField(Post)
+#     name = models.CharField(max_length=250, default='general')
+
+#     def __str__(self):
+#         return self.name
 
 
 class Like(models.Model):

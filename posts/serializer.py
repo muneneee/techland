@@ -51,25 +51,54 @@ class  CategorySerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
 
-    
 
 class WishlistSerializer(serializers.ModelSerializer):
-    # post = PostSerializer(read_only=True,many=True)
-    '''
-    Class that defines post serializer
-    '''
-    class Meta:
-        model = Wishlist
-        fields = '__all__'
+    
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
 
-class ListwishtSerializer(serializers.ModelSerializer):
-    post = PostSerializer(read_only=True,many=True)
-    '''
-    Class that defines post serializer
-    '''
     class Meta:
         model = Wishlist
-        fields = '__all__'
+        fields = ('user', 'post') 
+        extra_kwargs= {'post': {'required': False}} 
+        depth =1
+
+class WishlistSerializerwithoutUser(serializers.ModelSerializer):
+   
+    class Meta:
+        model = Wishlist
+        fields = ('post',)
+
+    def update(self, instance, validated_data):
+        post = validated_data.pop('post')
+        wishlist = instance
+        for (key, value) in validated_data.items():
+            setattr(wishlist, key, value)
+
+        for i in post:
+            wishlist.post.add(i)
+
+        wishlist.user = validated_data.get('user', instance.user)
+        wishlist.save()
+
+        return wishlist
+    
+
+# class WishlistSerializer(serializers.ModelSerializer):
+#     '''
+#     Class that defines post serializer
+#     '''
+#     class Meta:
+#         model = Wishlist
+#         fields = '__all__'
+
+# class ListwishtSerializer(serializers.ModelSerializer):
+#     post = PostSerializer(read_only=True,many=True)
+#     '''
+#     Class that defines post serializer
+#     '''
+#     class Meta:
+#         model = Wishlist
+#         fields = '__all__'
 
 
 
