@@ -24,7 +24,7 @@ from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
 from .models import Post, Category,Wishlist
 from authentication.models import User
-from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer
+from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer,ListwishtSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -33,6 +33,7 @@ from rest_framework import generics
 from django.utils import timezone
 
 from rest_framework.decorators import api_view
+
 
 class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
     '''
@@ -169,6 +170,12 @@ class Wishlists(generics.ListCreateAPIView):
 
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
+    
+    def get(self,request):
+        wishlist = Wishlist.objects.all()
+        serializer = ListwishtSerializer(wishlist,many=True)
+        return Response(serializer.data)
+
 
 
 class WishlistDetail(generics.RetrieveUpdateDestroyAPIView):

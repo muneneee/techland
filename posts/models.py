@@ -27,6 +27,10 @@ class Category(models.Model):
 #1 
 class Wishlist(models.Model):
     post = models.ManyToManyField(Post)
+    name = models.CharField(max_length=250, default='general')
+
+    def __str__(self):
+        return self.name
 
 
 # class Like(models.Model):
