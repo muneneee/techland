@@ -50,8 +50,8 @@ Running the application
 ### ENDPOINTS AVAILABLE 
 | Method | Endpoint                        | Parameters                 |Description                           |     
 | ------ | ------------------------------- |-------------------------   | -------------------------------------|
-| POST   |        /auth/login              |          --------         | log in user                           |   
-| POST   |        /auth/register/          |          --------         | register user                         |                            
+| POST   |        /auth/login              |          --------          | log in user                          |   
+| POST   |        /auth/register/          |          --------          | register user                        |                            
 | GET    |        /api/comments/           |    type=post&id=ID         | get comments to a particular post    |
 | POST   |        /api/comments/create/    |type=post&id=ID&parent_id=0 | create comment                       |
 | POST   |        posts/api/posts/         |          --------          | displays all posts
