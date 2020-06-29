@@ -50,9 +50,10 @@ Running the application
 ### ENDPOINTS AVAILABLE 
 | Method | Endpoint                        | Parameters                 |Description                           |     
 | ------ | ------------------------------- |-------------------------   | -------------------------------------|
-| POST   |        /auth/login              |          --------          | log in user                          |   
-| POST   |        /auth/register/          |          --------          | register user                                                                             | GET    |        /api/comments/           |    type=post&id=ID         | get comments to a particular post   
-| POST   |        /api/comments/create/    |type=post&id=ID&parent_id=0 | create comment              
+| POST   |        /auth/login              |          --------         | log in user                           |   
+| POST   |        /auth/register/          |          --------         | register user                         |                            
+| GET    |        /api/comments/           |    type=post&id=ID         | get comments to a particular post    |
+| POST   |        /api/comments/create/    |type=post&id=ID&parent_id=0 | create comment                       |
 | POST   |        posts/api/posts/         |          --------          | displays all posts
 | POST   |        posts/api/posts/         |          --------          | creates a post                
 | GET    |  posts/api/posts/<int:pk>/      |          --------          | retrieves a post using primary key                
