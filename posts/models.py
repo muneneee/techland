@@ -33,16 +33,10 @@ class Wishlist(models.Model):
         return self.name
 
 
-# class Like(models.Model):
-#     user = models.ManyToManyField(User)
-#     date_posted = models.DateTimeField(auto_now_add=True)
-#     date_updated = models.DateTimeField()
+class Like(models.Model):
+    user = models.ManyToManyField(User)
+    post = models.OneToOneField(Post, on_delete=models.CASCADE)
 
-# class Dislike(models.Model):
-#     user = models.ManyToManyField(User)
-#     date_posted = models.DateTimeField(auto_now_add=True)
-#     date_updated = models.DateTimeField()
-    
-
-
-
+class Dislike(models.Model):
+    user = models.ManyToManyField(User)
+    post = models.OneToOneField(Post, on_delete=models.CASCADE)

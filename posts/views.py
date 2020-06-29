@@ -22,9 +22,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
-from .models import Post, Category,Wishlist
+from .models import Post, Category,Wishlist, Like, Dislike
 from authentication.models import User
-from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer,ListwishtSerializer
+from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer,ListwishtSerializer, LikeSerializer, DislikeSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -182,20 +182,40 @@ class WishlistDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
 
+@api_view(['GET'])
+def get_likes(requests):
+    query_set = Like.objects.all()
+    serializer = LikeSerializer(query_set, many=True)
+    return Response(serializer.data)
 
-# @api_view(['GET'])
-# def get_likes(request):
-#     likes = Like.objects.all().count()
+@api_view(['POST'])
+def post_likes(requests, post_id):
+    post = Post.objects.get(id=post_id)
+    serializer = LikeSerializer(post, request.user)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
+    else:
+        return Response(serializers.errors, status = status.HTTP_400_BAD_REQUEST)
 
-#     serializer =  LikeSerializer(likes, many=True)
-#     return Response(seriali.data, status = status.HTTP_200_OK)
+@api_view(['GET'])
+def get_dislikes(requests):
+    query_set = Dislike.objects.all()
+    serializer = DislikeSerializer(query_set, many=True)
+    return Response(serializer.data)
 
-# @api_view(['POST'])
-# def post_likes(request):
-#     serializer = LikeSerializer(data = request.data)
-#     if serializer.is_valid():
-#         serializer.user = request.user
-#         serializer.date_updated = timezone.now()
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status =status.HTTP_400_BAD_REQUEST) 
+@api_view(['POST'])
+def post_dislikes(requests, post_id):
+    post = Post.objects.get(id=post_id)
+    data = [post, user]
+    serializer = DislikeSerializer(data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
+    else:
+        return Response(serializers.errors, status = status.HTTP_400_BAD_REQUEST)
+
+#current_user=request.user
+#    user_exists = Dislike.objects.filter(user = current_user).exists()
+#    if user_exists:
+#        Dislikes.objects.remove(current_user)

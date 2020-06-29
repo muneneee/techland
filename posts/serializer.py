@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Category,Wishlist
+from .models import Post, Category,Wishlist, Like, Dislike
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
 from django.contrib.auth import get_user_model
 from comment.models import Comment
@@ -74,19 +74,14 @@ class ListwishtSerializer(serializers.ModelSerializer):
 
 
 
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
 
+    class Meta:
+        model = Like
+        fields = ('user','post')  
 
+class DislikeSerializer(serializers.HyperlinkedModelSerializer):
 
-# class LikeSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Like
-#         fields = ('user','date_posted','date_updated')  
-
-# class DislikeSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Dislike
-#         fields = ('user','date_posted','date_updated')  
-
-        
+    class Meta:
+        model = Dislike
+        fields = ('user', 'post')
