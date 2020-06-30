@@ -21,14 +21,15 @@ from rest_framework import status,viewsets,serializers,status,permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
-from .models import Post, Category, Wishlist
+from .models import Post, Category,Subscription,Wishlist
 from authentication.models import User
-from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor,WishlistSerializer
+from .serializer import PostSerializer, CategorySerializer,PostSerializerWithoutAuthor, SubscriptionSerializer,SubcriptionSerializerwithoutUser,WishlistSerializer,WishlistSerializerwithoutUser
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import FormParser,MultiPartParser, JSONParser, FileUploadParser
 from rest_framework import filters
 from .permissions import IsOwnerOrReadOnly,IsUserStaff
+
 
 
 
@@ -182,8 +183,172 @@ class CategoryDetails(RetrieveAPIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class SubscriptionList(ListModelMixin,GenericAPIView):
+    '''
+    List that allows you to view all the subscriptions
+    '''
 
-class WishlistViewSet(viewsets.ModelViewSet):
-     
-     queryset = Wishlist.objects.all()
-     serializer_class = WishlistSerializer
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+    
+    def get(self, request, *args, **kwargs):
+        '''
+        Function that gives you a list of all the subscriptions
+        '''
+        return self.list(request,*args,*kwargs)
+
+class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
+    '''
+    View that allows you to access one subscription on the list
+    '''
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+
+        if self.request.method == 'PUT':
+            serializer_class = SubcriptionSerializerwithoutUser
+        return serializer_class
+
+    def get_subscription(self,pk):
+        try:
+            return Subscription.objects.get(user=pk)
+        except Subscription.DoesNotExist:
+            return Http404
+
+    def get(self,request, pk, format=None):
+        '''
+        Function that retrieves specified post
+        '''
+        subscription = self.get_subscription(pk)
+        categories = subscription.categories.all()
+        posts = Post.objects.all()
+        
+        for i in posts:
+            if i.category in categories:
+                subscription.posts.add(i)
+
+        serializers = SubscriptionSerializer(subscription)
+        return Response(serializers.data)
+
+
+    def put(self,request,pk, format=None):
+        '''
+        Function that updates a specified subscription
+        '''
+        subscription = self.get_subscription(pk)  
+        serializers = SubcriptionSerializerwithoutUser(instance =subscription,data= request.data, partial=True)
+
+        if serializers.is_valid(raise_exception=True):
+            subscription = serializers.save()
+            return Response(serializers.data)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubscriptionsDelete(DestroyAPIView,):
+    '''
+    View that allows you to delete one category  on the list
+    '''
+
+    def destroy(self,request,pk, cat_id, format=None): 
+        def get_subscription(self,pk):
+            try:
+                return Subscription.objects.get(user=pk)
+            except Subscription.DoesNotExist:
+                return Http404
+
+        def get_category(self,pk):
+            try:
+                return Category.objects.get(id=cat_id)
+            except Category.DoesNotExist:
+                return Http404
+
+        
+
+        subscription = Subscription.objects.get(user=pk)
+        category = Category.objects.get(id=cat_id)
+
+        if category in subscription.categories.all():
+            subscription.categories.remove(category)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    
+
+
+
+class WishlistList(ListModelMixin,GenericAPIView):
+       
+    queryset = Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+    
+    def get(self, request, *args, **kwargs):
+      
+        return self.list(request,*args,*kwargs)
+
+class WishlistDetails(RetrieveAPIView, UpdateAPIView):
+    
+    queryset =Wishlist.objects.all()
+    serializer_class = WishlistSerializer
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+
+        if self.request.method == 'PUT':
+            serializer_class = WishlistSerializerwithoutUser
+        return serializer_class
+
+    def get_wishlist(self,pk):
+        try:
+            return Wishlist.objects.get(user=pk)
+        except Wishlist.DoesNotExist:
+            return Http404
+
+    def get(self,request, pk, format=None):
+
+        wishlist = self.get_wishlist(pk)
+        serializers = WishlistSerializer(wishlist)
+        return Response(serializers.data)
+
+    def put(self,request,pk, format=None):
+       
+        wishlist = self.get_wishlist(pk)  
+        serializers = WishlistSerializerwithoutUser(instance = wishlist,data= request.data, partial=True)
+
+        if serializers.is_valid(raise_exception=True):
+            wishlist = serializers.save()
+            return Response(serializers.data)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WishlistDelete(DestroyAPIView,):
+  
+    def destroy(self,request,pk, post_id, format=None): 
+        def get_wishlist(self,pk):
+            try:
+                return  Wishlist.objects.get(user=pk)
+            except  Wishlist.DoesNotExist:
+                return Http404
+
+        def get_post(self,pk):
+            try:
+                return Post.objects.get(id=post_id)
+            except Post.DoesNotExist:
+                return Http404
+
+        
+
+        wishlist= Wishlist.objects.get(user=pk)
+        post = Post.objects.get(id=post_id)
+
+        if post in  wishlist.posts.all():
+            wishlist.posts.remove(post)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+        
+    

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Category, Wishlist
+from .models import Post, Category,Subscription, Wishlist
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
 from django.contrib.auth import get_user_model
 from comment.models import Comment
@@ -33,10 +33,8 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
     class Meta:
         model = Post
-        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved', 'wishlists')
-        extra_kwargs = {'wishlists': {'required': False}}
-
-
+        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
+        depth=1
 
     def create(self,validated_data):
         return Post.objects.create(**validated_data)
@@ -53,6 +51,7 @@ class PostSerializerWithoutAuthor(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id','image', 'title', 'content', 'timestamp', 'category','is_approved')
+        depth =1
     
     def update(self, instance, validated_data):
         instance.image = validated_data.get('image', instance.image)
@@ -61,36 +60,89 @@ class PostSerializerWithoutAuthor(serializers.ModelSerializer):
         instance.category = validated_data.get('category', instance.category)
         instance.is_approved = validated_data.get('is_approved', instance.is_approved)
         instance.author = validated_data.get('author', instance.author)
+       
         instance.save()
         return instance
 
 class  CategorySerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Category
         fields = ('id', 'name')
 
+
+        
     def create(self,validated_data):
         return Category.objects.create(**validated_data)
 
 
 
+class SubscriptionSerializer(serializers.ModelSerializer):
+    ''' 
+    Class that defines subscription serializer
+    '''
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
 
+    class Meta:
+        model = Subscription
+        fields = ('user', 'categories', 'posts') 
+        extra_kwargs= {'categories': {'required': False}} 
+        depth =1
 
+class SubcriptionSerializerwithoutUser(serializers.ModelSerializer):
+    '''
+    Class that defines subscription serializer without user
+    '''
+    class Meta:
+        model = Subscription
+        fields = ('categories',)
 
-# class WishlistSerializerwithoutUser(serializers.ModelSerializer):
-#     '''
-#     Class that defines wishlist serializer without user
-#     '''
-#     class Meta:
-#         model = Wishlist
-#         fields = ('posts',)
+    def update(self, instance, validated_data):
+        categories = validated_data.pop('categories')
+        subscription = instance
+        for (key, value) in validated_data.items():
+            setattr(subscription, key, value)
 
-#     def update(self, instance, validated_data):
-#         instance.user = validated_data.get('user', instance.user)
-#         instance.posts = validated_data.get('posts', instance.posts)
-#         instance.save()
-#         return instance
+        for category in categories:
+            subscription.categories.add(category)
+
+        subscription.user = validated_data.get('user', instance.user)
+        subscription.save()
+
+        return subscription
+
+class WishlistSerializer(serializers.ModelSerializer):
     
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
+
+    class Meta:
+        model = Wishlist
+        fields = ('user', 'posts') 
+        extra_kwargs= {'posts': {'required': False}} 
+        depth =1
+
+class WishlistSerializerwithoutUser(serializers.ModelSerializer):
+   
+    class Meta:
+        model = Wishlist
+        fields = ('posts',)
+
+    def update(self, instance, validated_data):
+        posts = validated_data.pop('posts')
+        wishlist = instance
+        for (key, value) in validated_data.items():
+            setattr(wishlist, key, value)
+
+        for i in posts:
+            wishlist.posts.add(i)
+
+        wishlist.user = validated_data.get('user', instance.user)
+        wishlist.save()
+
+        return wishlist
     
 
     
+                
+
+        

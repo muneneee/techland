@@ -4,7 +4,8 @@ from authentication.models import User
 from comment.models import Comment
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.dispatch import receiver 
+
 
 
 
@@ -27,19 +28,31 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def natural_key(self):
-        return self.name
+
+class Subscription(models.Model):
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category,related_name = "subscriptions", blank=True)
+    posts = models.ManyToManyField(Post, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s subscriptions"
+
+@receiver(post_save, sender=User)
+def create_user_subscription(sender,instance,created, **kwargs):
+    if created:
+        Subscription.objects.create(user=instance)
+
+@receiver(post_save,sender = User)
+def save_user_subscription(sender,instance,**kwargs):
+    instance.subscription.save
 
 
 class Wishlist(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
-    posts = models.ManyToManyField(Post, blank = True,related_name='wishlists')
-
+    posts = models.ManyToManyField(Post,related_name="wishlists", blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s wishlist"
-
-
 
 @receiver(post_save, sender=User)
 def create_user_wishlist(sender,instance,created, **kwargs):
@@ -49,3 +62,4 @@ def create_user_wishlist(sender,instance,created, **kwargs):
 @receiver(post_save,sender = User)
 def save_user_wishlist(sender,instance,**kwargs):
     instance.wishlist.save
+
