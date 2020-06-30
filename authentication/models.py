@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import posts.models
+from cloudinary.models import CloudinaryField
 
 
 class User(AbstractBaseUser,PermissionsMixin):
@@ -28,7 +29,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
-    picture = ImageField(blank=True, manual_crop='')
+    picture = CloudinaryField('image')
     
 
 

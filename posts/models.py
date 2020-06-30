@@ -5,12 +5,14 @@ from comment.models import Comment
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.signals import post_save
 from django.dispatch import receiver 
+from cloudinary.models import CloudinaryField
+
 
 
 
 
 class Post(models.Model):
-    image = ImageField(blank=True, manual_crop='')
+    image = CloudinaryField('image')
     title= models.CharField(max_length=30)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

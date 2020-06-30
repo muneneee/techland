@@ -52,6 +52,7 @@ class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
         '''
         Function that lets you add a new post to the list of all post
         '''
+    
         serializers = PostSerializer(data = request.data)
         if serializers.is_valid():
             serializers.save()
