@@ -11,4 +11,7 @@ urlpatterns = [
     path('api/subscriptions/', views.SubscriptionList.as_view()),
     path('api/subscriptions/<int:pk>', views.SubscriptionDetails.as_view()),
     path('api/subscriptions/<int:pk>/<int:cat_id>', views.SubscriptionsDelete.as_view()),
+    path('api/wishlist/', views.WishlistList.as_view()),
+    path('api/wishlist/<int:pk>', views.WishlistDetails.as_view()),
+    path('api/wishlist/<int:pk>/<int:post_id>', views.WishlistDelete.as_view()),
 ]

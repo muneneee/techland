@@ -46,4 +46,10 @@ class Subscription(models.Model):
 #     instance.subscription.save
 
 
+class Wishlist(models.Model):
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
+    posts = models.ManyToManyField(Post,related_name="wishlists", blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s wishlist"
 

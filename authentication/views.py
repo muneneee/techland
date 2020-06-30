@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from .models import User,Profile
-from .serializer import UserLoginSerializer,RegistrationSerializer, ProfileSerializer, ProfileSerializerwithoutUser
+from .serializer import RegistrationSerializer, ProfileSerializer, ProfileSerializerwithoutUser
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.mixins import ListModelMixin
@@ -30,21 +30,6 @@ def register_view(request):
         return Response(data)
 
 
-
-
-
-
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class= UserLoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer= UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            new_data = serializer.data
-            return Response(new_data, status=HTTP_200_OK)
-        return Response(serializer.erros, status=HTTP_400_BAD_REQUEST)
 
 class ProfileList(ListModelMixin,GenericAPIView):
     '''

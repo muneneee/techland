@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Category,Subscription
+from .models import Post, Category,Subscription, Wishlist
 from rest_framework.serializers import ModelSerializer,SerializerMethodField,ValidationError
 from django.contrib.auth import get_user_model
 from comment.models import Comment
@@ -95,15 +95,36 @@ class SubcriptionSerializerwithoutUser(serializers.ModelSerializer):
 
         return subscription
 
-    # def remove_category(self, instance, validated_data):
-    #     subscription = instance 
-    #     category = validated_data.get(category)
+class WishlistSerializer(serializers.ModelSerializer):
+    
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
 
-    #     for i in subscription.categories.all():
-    #         if i == category:
-    #             subscription.categories.remove(i)
+    class Meta:
+        model = Wishlist
+        fields = ('user', 'posts') 
+        extra_kwargs= {'posts': {'required': False}} 
+        depth =1
 
-    #     subscription.save()
+class WishlistSerializerwithoutUser(serializers.ModelSerializer):
+   
+    class Meta:
+        model = Wishlist
+        fields = ('posts',)
+
+    def update(self, instance, validated_data):
+        posts = validated_data.pop('posts')
+        wishlist = instance
+        for (key, value) in validated_data.items():
+            setattr(wishlist, key, value)
+
+        for i in posts:
+            wishlist.posts.add(i)
+
+        wishlist.user = validated_data.get('user', instance.user)
+        wishlist.save()
+
+        return wishlist
+    
 
     
                 

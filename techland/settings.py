@@ -51,8 +51,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'comment',
     'corsheaders',
-
-
 ]
 
 MIDDLEWARE = [
@@ -92,6 +90,15 @@ UPLOADCARE = {
     'pub_key': '557ba8f5e78026902bd0',
     'secret': '48f6b1bf0063508ad239',
 }
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
 
 
 WSGI_APPLICATION = 'techland.wsgi.application'
@@ -156,7 +163,6 @@ AUTH_USER_MODEL = 'authentication.User'
 
 LOGIN_URL = 'login'
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:4200"
-]
+CORS_ORIGIN_ALLOW_ALL = True   
+
 
