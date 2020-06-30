@@ -33,7 +33,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
     class Meta:
         model = Post
-        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
+        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved','wishlists')
         depth=1
 
     def create(self,validated_data):
