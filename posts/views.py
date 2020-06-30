@@ -17,7 +17,7 @@ from rest_framework.permissions import (
     )
 from .serializer import PostSerializer
 from authentication.models import User
-from rest_framework import status,viewsets,serializers,status
+from rest_framework import status,viewsets,serializers,status,permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
@@ -28,6 +28,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import FormParser,MultiPartParser, JSONParser, FileUploadParser
 from rest_framework import filters
+from .permissions import IsOwnerOrReadOnly,IsUserStaff
 
 
 
@@ -84,6 +85,7 @@ class PostDetails(RetrieveAPIView):
         Function that retrieves specified post
         '''
         post = self.get_post(pk)
+        self.check_object_permissions(self.request, post)
         serializers = PostSerializer(post)
         return Response(serializers.data)
 
@@ -92,7 +94,12 @@ class PostDetails(RetrieveAPIView):
         Function that updates a specified post
         '''
         post = self.get_post(pk)
+        user = request.user
         serializers = PostSerializerWithoutAuthor(instance=post, data= request.data, partial=True)
+
+        if post.author != user:
+            return Response('You do not have permission to change post')
+
         if serializers.is_valid(raise_exception=True):
             post = serializers.save()
             return Response(serializers.data)
@@ -103,6 +110,12 @@ class PostDetails(RetrieveAPIView):
         Function that deletes a specified post
         '''
         post = self.get_post(pk)
+        user = request.user
+
+        if post.author != user:
+            return Response('You do not have permission to change post')
+
+        self.check_object_permissions(self.request, post)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -113,6 +126,7 @@ class CategoryList(ListModelMixin,GenericAPIView,CreateModelMixin):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsUserStaff,)
 
     def get(self, request, *args, **kwargs):
         '''
@@ -132,6 +146,8 @@ class CategoryDetails(RetrieveAPIView):
     '''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsUserStaff,)
+
 
     def get_category(self,pk):
         try:
