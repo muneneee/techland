@@ -34,16 +34,16 @@ class Subscription(models.Model):
     categories = models.ManyToManyField(Category,related_name = "subscriptions", blank=True)
 
     def __str__(self):
-        return f"{self.user.username}'s subcriptions"
+        return f"{self.user.username}'s subscriptions"
 
-# @receiver(post_save, sender=User)
-# def create_user_subscription(sender,instance,created, **kwargs):
-#     if created:
-#         Subscription.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def create_user_subscription(sender,instance,created, **kwargs):
+    if created:
+        Subscription.objects.create(user=instance)
 
-# @receiver(post_save,sender = User)
-# def save_user_subscription(sender,instance,**kwargs):
-#     instance.subscription.save
+@receiver(post_save,sender = User)
+def save_user_subscription(sender,instance,**kwargs):
+    instance.subscription.save
 
 
 class Wishlist(models.Model):
@@ -52,4 +52,13 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s wishlist"
+
+@receiver(post_save, sender=User)
+def create_user_wishlist(sender,instance,created, **kwargs):
+    if created:
+        Wishlist.objects.create(user=instance)
+
+@receiver(post_save,sender = User)
+def save_user_wishlist(sender,instance,**kwargs):
+    instance.wishlist.save
 
