@@ -237,7 +237,12 @@ class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
         '''
         Function that updates a specified subscription
         '''
-        subscription = self.get_subscription(pk)  
+        subscription = self.get_subscription(pk)
+        user = request.user  
+
+        if subscription.user != user:
+            return Response('You do not have permission to edit')
+
         serializers = SubcriptionSerializerwithoutUser(instance =subscription,data= request.data, partial=True)
 
         if serializers.is_valid(raise_exception=True):
@@ -316,7 +321,12 @@ class WishlistDetails(RetrieveAPIView, UpdateAPIView):
     def put(self,request,pk, format=None):
        
         wishlist = self.get_wishlist(pk)  
+        user =request.user
         serializers = WishlistSerializerwithoutUser(instance = wishlist,data= request.data, partial=True)
+
+
+        if wishlist.user != user:
+            return Response('You do not have permission to edit')
 
         if serializers.is_valid(raise_exception=True):
             wishlist = serializers.save()
