@@ -69,7 +69,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subscription
-        fields = ('user', 'categories') 
+        fields = ('user', 'categories', 'posts') 
         extra_kwargs= {'categories': {'required': False}} 
         depth =1
 

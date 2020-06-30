@@ -205,8 +205,16 @@ class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
         Function that retrieves specified post
         '''
         subscription = self.get_subscription(pk)
+        categories = subscription.categories.all()
+        posts = Post.objects.all()
+        
+        for i in posts:
+            if i.category in categories:
+                subscription.posts.add(i)
+
         serializers = SubscriptionSerializer(subscription)
         return Response(serializers.data)
+
 
     def put(self,request,pk, format=None):
         '''
@@ -219,6 +227,7 @@ class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
             subscription = serializers.save()
             return Response(serializers.data)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SubscriptionsDelete(DestroyAPIView,):
     '''
@@ -248,6 +257,11 @@ class SubscriptionsDelete(DestroyAPIView,):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    
+
+
 
 class WishlistList(ListModelMixin,GenericAPIView):
        

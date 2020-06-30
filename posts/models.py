@@ -32,6 +32,7 @@ class Category(models.Model):
 class Subscription(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category,related_name = "subscriptions", blank=True)
+    posts = models.ManyToManyField(Post, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s subscriptions"
