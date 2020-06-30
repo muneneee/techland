@@ -1,2 +1,4 @@
 venv/
 .env
+posts/__pycache__/
+
