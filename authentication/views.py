@@ -72,6 +72,8 @@ class ProfileDetails(RetrieveAPIView, UpdateAPIView):
         Function that retrieves specified post
         '''
         profile = self.get_profile(pk)
+
+
         serializers = ProfileSerializer(profile)
         return Response(serializers.data)
 
@@ -92,6 +94,8 @@ class ProfileDetails(RetrieveAPIView, UpdateAPIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
+
+
 class TokenObtainPairView(TokenViewBase):
     """
     Takes a set of user credentials and returns an access and refresh JSON web
@@ -101,4 +105,8 @@ class TokenObtainPairView(TokenViewBase):
 
 
 token_obtain_pair = TokenObtainPairView.as_view()
+
+
+
+
        

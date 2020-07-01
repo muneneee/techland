@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import posts.models
 from cloudinary.models import CloudinaryField
+# from posts.models import Post
 
 class User(AbstractBaseUser,PermissionsMixin):
     username = models.CharField(max_length=30,unique=True)
@@ -29,7 +30,7 @@ class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
     picture = ImageField(blank=True, manual_crop='')
-    
+    # posts = models.ManyToManyField(Post, blank=True)
 
 
     def __str__(self):

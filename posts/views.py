@@ -31,6 +31,7 @@ from rest_framework import filters
 # from .permissions import IsOwnerOrReadOnly,IsUserStaff
 from .permissions import IsOwnerOrReadOnly, IsUserStaff
 from .serializer import PostCreateSerializer
+from authentication.models import Profile
 
 
 
@@ -365,6 +366,22 @@ class WishlistDelete(DestroyAPIView,):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class getUserPosts(ListAPIView):
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, pk):
+        '''
+        Function that gives you a list of all the subscriptions
+        '''
+        posts = Post.objects.filter(author=pk)
+        serializer = PostSerializer(posts, many=True)
+
+        return Response(serializer.data)
+
+
+    
 
 
         
