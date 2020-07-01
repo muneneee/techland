@@ -120,8 +120,8 @@ class PostDetails(RetrieveAPIView):
         post = self.get_post(pk)
         user = request.user
 
-        if post.author != user:
-            return Response('You do not have permission to change post')
+        # if post.author != user:
+        #     return Response('You do not have permission to change post')
 
         self.check_object_permissions(self.request, post)
         post.delete()
@@ -134,7 +134,7 @@ class CategoryList(ListModelMixin,GenericAPIView,CreateModelMixin):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsUserStaff,)
+    # permission_classes = (IsUserStaff,)
 
     def get(self, request, *args, **kwargs):
         '''
@@ -154,7 +154,7 @@ class CategoryDetails(RetrieveAPIView):
     '''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsUserStaff,)
+    # permission_classes = (IsUserStaff,)
 
 
     def get_category(self,pk):
@@ -247,8 +247,8 @@ class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
         subscription = self.get_subscription(pk)
         user = request.user  
 
-        if subscription.user != user:
-            return Response('You do not have permission to edit')
+        # if subscription.user != user:
+        #     return Response('You do not have permission to edit')
 
         serializers = SubcriptionSerializerwithoutUser(instance =subscription,data= request.data, partial=True)
 
@@ -332,8 +332,8 @@ class WishlistDetails(RetrieveAPIView, UpdateAPIView):
         serializers = WishlistSerializerwithoutUser(instance = wishlist,data= request.data, partial=True)
 
 
-        if wishlist.user != user:
-            return Response('You do not have permission to edit')
+        # if wishlist.user != user:
+        #     return Response('You do not have permission to edit')
 
         if serializers.is_valid(raise_exception=True):
             wishlist = serializers.save()
