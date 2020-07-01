@@ -11,6 +11,7 @@ from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIVi
 from rest_framework.mixins import ListModelMixin
 from django.http import Http404
 from rest_framework_simplejwt.views import TokenViewBase
+from utils.media_handler import CloudinaryResourceHandler
 
 
 
@@ -47,6 +48,8 @@ class ProfileList(ListModelMixin,GenericAPIView):
         '''
         return self.list(request,*args,*kwargs)
 
+Uploader =  CloudinaryResourceHandler() 
+
 class ProfileDetails(RetrieveAPIView, UpdateAPIView):
     '''
     View that allows you to access one profile on the list
@@ -81,18 +84,21 @@ class ProfileDetails(RetrieveAPIView, UpdateAPIView):
         '''
         Function that allows user to update a profile
         '''
+        
+        payload = request.data
+        image = Uploader.upload_image_from_request(request)
+        payload['image'] = image
 
         profile = self.get_profile(pk)
-        serializer = ProfileSerializerwithoutUser(instance=profile, data = request.data, partial=True)
-
-        # if profile.user != user:
-        #     return Response('You do not have permission to edit')
+        serializer = ProfileSerializerwithoutUser(instance=profile, data = payload, partial=True)
 
 
         if serializer.is_valid(raise_exception=True):
             profile = serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+
 
 
 

@@ -32,6 +32,7 @@ from rest_framework import filters
 from .permissions import IsOwnerOrReadOnly, IsUserStaff
 from .serializer import PostCreateSerializer
 from authentication.models import Profile
+from utils.media_handler import CloudinaryResourceHandler
 
 
 
@@ -52,7 +53,7 @@ class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
         '''
         return self.list(request, *args, *kwargs)
 
-    
+Uploader =  CloudinaryResourceHandler() 
 
 class CreatePost(CreateAPIView):
     queryset = Post.objects.all()
@@ -62,8 +63,11 @@ class CreatePost(CreateAPIView):
         '''
         Function that lets you add a new post to the list of all post
         '''
-    
-        serializers = self.serializer_class(data = request.data)
+        payload = request.data
+        image = Uploader.upload_image_from_request(request)
+        payload['image'] = image
+        
+        serializers = self.serializer_class(data = payload)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)

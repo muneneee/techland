@@ -29,7 +29,8 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
-    picture = ImageField(blank=True, manual_crop='')
+    image = models.URLField(blank=True)
+    email = models.EmailField(blank=True)
     # posts = models.ManyToManyField(Post, blank=True)
 
 

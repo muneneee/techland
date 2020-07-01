@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-# import cloudinary
+import cloudinary
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG')
@@ -167,8 +167,8 @@ LOGIN_URL = 'login'
 
 CORS_ORIGIN_ALLOW_ALL = True   
 
-# cloudinary.config( 
-#   cloud_name = "dianak", 
-#   api_key = "396197422847883", 
-#   api_secret = "Ebd5UDK17kBfZMfa68KyIBUF4ms" 
-# )
+cloudinary.config( 
+  cloud_name = "dianak", 
+  api_key = "396197422847883", 
+  api_secret = "Ebd5UDK17kBfZMfa68KyIBUF4ms" 
+)
