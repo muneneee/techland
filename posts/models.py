@@ -12,7 +12,7 @@ from cloudinary.models import CloudinaryField
 
 
 class Post(models.Model):
-    image = CloudinaryField('image')
+    image = ImageField(blank=True, manual_crop='')
     title= models.CharField(max_length=30)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

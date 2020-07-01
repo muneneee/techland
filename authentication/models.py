@@ -28,7 +28,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Profile(models.Model):
     user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     bio = models.TextField()
-    picture = CloudinaryField('image')
+    picture = ImageField(blank=True, manual_crop='')
     
 
 
