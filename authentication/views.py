@@ -80,6 +80,11 @@ class ProfileDetails(RetrieveAPIView, UpdateAPIView):
 
         profile = self.get_profile(pk)
         serializer = ProfileSerializerwithoutUser(instance=profile, data = request.data, partial=True)
+
+        if profile.user != user:
+            return Response('You do not have permission to edit')
+
+
         if serializer.is_valid(raise_exception=True):
             profile = serializer.save()
             return Response(serializer.data)
