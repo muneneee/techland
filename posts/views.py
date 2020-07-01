@@ -16,9 +16,8 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
     )
 from .serializer import PostSerializer
-from .models import  Post
 from authentication.models import User
-from rest_framework import status
+from rest_framework import status,viewsets,serializers,status,permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
@@ -28,6 +27,10 @@ from .serializer import PostSerializer, CategorySerializer,PostSerializerWithout
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import FormParser,MultiPartParser, JSONParser, FileUploadParser
+from rest_framework import filters
+# from .permissions import IsOwnerOrReadOnly,IsUserStaff
+from .permissions import IsOwnerOrReadOnly, IsUserStaff
+from .serializer import PostCreateSerializer
 
 
 
@@ -48,17 +51,22 @@ class PostList(ListModelMixin,GenericAPIView,CreateModelMixin):
         '''
         return self.list(request, *args, *kwargs)
 
+    
+
+class CreatePost(CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostCreateSerializer
+
     def post(self, request, format = None):
         '''
         Function that lets you add a new post to the list of all post
         '''
     
-        serializers = PostSerializer(data = request.data)
+        serializers = self.serializer_class(data = request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class PostDetails(RetrieveAPIView):
     '''
@@ -85,6 +93,7 @@ class PostDetails(RetrieveAPIView):
         Function that retrieves specified post
         '''
         post = self.get_post(pk)
+        self.check_object_permissions(self.request, post)
         serializers = PostSerializer(post)
         return Response(serializers.data)
 
@@ -93,7 +102,12 @@ class PostDetails(RetrieveAPIView):
         Function that updates a specified post
         '''
         post = self.get_post(pk)
+        user = request.user
         serializers = PostSerializerWithoutAuthor(instance=post, data= request.data, partial=True)
+
+        if post.author != user:
+            return Response('You do not have permission to change post')
+
         if serializers.is_valid(raise_exception=True):
             post = serializers.save()
             return Response(serializers.data)
@@ -104,6 +118,12 @@ class PostDetails(RetrieveAPIView):
         Function that deletes a specified post
         '''
         post = self.get_post(pk)
+        user = request.user
+
+        if post.author != user:
+            return Response('You do not have permission to change post')
+
+        self.check_object_permissions(self.request, post)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -114,6 +134,7 @@ class CategoryList(ListModelMixin,GenericAPIView,CreateModelMixin):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsUserStaff,)
 
     def get(self, request, *args, **kwargs):
         '''
@@ -133,6 +154,8 @@ class CategoryDetails(RetrieveAPIView):
     '''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsUserStaff,)
+
 
     def get_category(self,pk):
         try:
@@ -221,7 +244,12 @@ class SubscriptionDetails(RetrieveAPIView, UpdateAPIView):
         '''
         Function that updates a specified subscription
         '''
-        subscription = self.get_subscription(pk)  
+        subscription = self.get_subscription(pk)
+        user = request.user  
+
+        if subscription.user != user:
+            return Response('You do not have permission to edit')
+
         serializers = SubcriptionSerializerwithoutUser(instance =subscription,data= request.data, partial=True)
 
         if serializers.is_valid(raise_exception=True):
@@ -300,7 +328,12 @@ class WishlistDetails(RetrieveAPIView, UpdateAPIView):
     def put(self,request,pk, format=None):
        
         wishlist = self.get_wishlist(pk)  
+        user =request.user
         serializers = WishlistSerializerwithoutUser(instance = wishlist,data= request.data, partial=True)
+
+
+        if wishlist.user != user:
+            return Response('You do not have permission to edit')
 
         if serializers.is_valid(raise_exception=True):
             wishlist = serializers.save()

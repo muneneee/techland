@@ -5,19 +5,38 @@ from django.contrib.auth import get_user_model
 from comment.models import Comment
 from comment.api.serializers import CommentSerializer
 
+
 User = get_user_model()
 
+
+class WishlistSerializer(serializers.ModelSerializer):
+    ''' 
+    Class that defines wishlist serializer
+    '''
+    user = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
+
+    class Meta:
+        model = Wishlist
+        fields = ('user', 'posts')
+        extra_kwargs = {'posts': {'required': False}}
+        depth = 1
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = "__all__"
 
 class PostSerializer(serializers.ModelSerializer):
     '''
     Class that defines post serializer
     '''
     comments =SerializerMethodField()
+    wishlists = WishlistSerializer(many=True, read_only=True)
     category = serializers. SlugRelatedField(read_only= True, slug_field= 'name')
     author = serializers.SlugRelatedField(read_only = True, slug_field = 'username')
     class Meta:
         model = Post
-        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved')
+        fields = ('id','image', 'title', 'content', 'timestamp', 'category', 'comments','author', 'is_approved','wishlists')
         depth=1
 
     def create(self,validated_data):
