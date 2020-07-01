@@ -3,6 +3,8 @@ from rest_framework.serializers import ModelSerializer,CharField,EmailField
 from django.db.models import Q
 from .models import User, Profile
 from django.core.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
 
 
@@ -32,6 +34,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class TokenObtainPairSerializer(TokenObtainSerializer):
+    @classmethod
+    def get_token(cls, user):
+        return RefreshToken.for_user(user)
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        refresh = self.get_token(self.user)
+
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+        data['user_id'] = str(self.user.id)
+
+        return data
+
 
 
 

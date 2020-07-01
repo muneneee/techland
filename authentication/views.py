@@ -5,11 +5,13 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from .models import User,Profile
-from .serializer import RegistrationSerializer, ProfileSerializer, ProfileSerializerwithoutUser
+from .serializer import RegistrationSerializer, ProfileSerializer, ProfileSerializerwithoutUser, TokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.mixins import ListModelMixin
 from django.http import Http404
+from rest_framework_simplejwt.views import TokenViewBase
+
 
 
 
@@ -90,5 +92,13 @@ class ProfileDetails(RetrieveAPIView, UpdateAPIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
+class TokenObtainPairView(TokenViewBase):
+    """
+    Takes a set of user credentials and returns an access and refresh JSON web
+    token pair to prove the authentication of those credentials.
+    """
+    serializer_class = TokenObtainPairSerializer
 
+
+token_obtain_pair = TokenObtainPairView.as_view()
        
